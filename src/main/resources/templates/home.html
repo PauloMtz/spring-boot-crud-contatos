@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+	<meta charset="UTF-8" />
+</head>
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+		<div class="base-home">
+
+			<h1 class="titulo"><span class="cor">SEJA</span> BEM VINDO</h1>
+			<div class="base-colunas">
+				<a th:href="@{/contato/cadastrar}" class="col">
+					<i class="icone ico1"></i>
+					<span><b>adicionar</b> contato</span>
+				</a>
+
+				<a th:href="@{/contato/listar}" class="col">
+					<i class="icone ico2"></i>
+					<span><b>listar</b> contatos</span>
+				</a>
+
+				<a th:href="@{/contato/listar}" class="col">
+					<i class="icone ico3"></i>
+					<span><b>Editar</b> contato</span>
+				</a>
+
+				<a th:href="@{/contato/listar}" class="col">
+					<i class="icone ico4"></i>
+					<span><b>Excluir</b> contato</span>
+				</a>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

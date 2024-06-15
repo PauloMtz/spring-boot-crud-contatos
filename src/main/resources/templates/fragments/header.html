@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<header th:fragment="cabecalho">
+		<div class="base-topo">
+			<a th:href="@{/}" class="logo"></a>
+			<form th:action="@{/contato/buscar}">
+				<div class="base-busca">
+					<input th:name="nome" placeholder="Pesquisa" />
+					<input type="submit" class="but" />		
+				</div>
+			</form>
+		</div>
+	</header>
+</body>
+</html>

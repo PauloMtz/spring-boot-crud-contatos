@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<title>Spring-Boot Contatos</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	
+	<!-- favicon -->
+	<link rel="icon" th:href="@{/image/favicon.png}" />
+</head>
+<body>
+	<div class="conteudo">
+		<div class="base-central">
+
+			<header th:replace="~{fragments/header :: cabecalho}"></header>
+			
+			<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+			<section layout:fragment="corpo"></section>
+
+			<footer th:replace="~{fragments/footer :: rodape}"></footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+	<meta charset="UTF-8" />
+</head>
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+		<div class="base-home">
+			<h1 class="titulo"><span class="cor">Novo</span> contato</h1>
+
+			<div class="base-formulario">
+				<form method="POST" th:object="${contato}">
+
+					<div class="row">
+						<div class="col">
+							<label>Nome</label>
+							<input th:field="*{nome}" id="nome" placeholder="Informe o nome"
+								th:disabled="${contato.id != null}"/>
+
+							<div th:if="${#fields.hasErrors('nome')}">
+								<label style="color: red;" th:errors="*{nome}"></label>
+							</div>
+						</div>
+
+						<div class="col">
+							<label>CPF</label>
+							<input th:field="*{cpf}" onblur="mascaraCPF(this)"
+								onkeydown="return campoNumerico(event)" maxlength="11" 
+								placeholder="Informe o CPF" th:disabled="${contato.id != null}">
+						
+							<div th:if="${#fields.hasErrors('cpf')}">
+								<label style="color: red;" th:errors="*{cpf}"></label>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col">
+							<label>Email</label>
+							<input th:field="*{email}" id="email" placeholder="Informe o email">
+
+							<div th:if="${#fields.hasErrors('email')}">
+								<label style="color: red;" th:errors="*{email}"></label>
+							</div>
+						</div>
+
+						<div class="col">
+							<label>Telefone</label>
+							<input th:field="*{telefone}" onblur="mascaraTelefone(this)" 
+								onkeydown="return campoNumerico(event)" maxlength="10"
+								placeholder="Informe o telefone">
+						
+							<div th:if="${#fields.hasErrors('telefone')}">
+								<label style="color: red;" th:errors="*{telefone}"></label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col">
+							<label>CEP</label>
+							<input th:field="*{endereco.cep}" id="cep" onblur="mascaraCep(this)"
+								placeholder="Informe o CEP" maxlength="8" 
+								onkeydown="return campoNumerico(event)">
+						
+							<div th:if="${#fields.hasErrors('endereco.cep')}">
+								<label style="color: red;" th:errors="*{endereco.cep}"></label>
+							</div>
+						</div>
+						
+						<div class="col">
+							<label>Endereço</label>
+							<input th:field="*{endereco.endereco}" id="endereco" placeholder="Informe o endereço">
+						
+							<div th:if="${#fields.hasErrors('endereco.endereco')}">
+								<label style="color: red;" th:errors="*{endereco.endereco}"></label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col">
+							<label>Complemento</label>
+							<input th:field="*{endereco.complemento}">
+						</div>
+
+						<div class="col">
+							<label>Bairro</label>
+							<input th:field="*{endereco.bairro}" id="bairro" placeholder="Informe o bairro">
+						
+							<div th:if="${#fields.hasErrors('endereco.bairro')}">
+								<label style="color: red;" th:errors="*{endereco.bairro}"></label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col">
+							<label>Cidade</label>
+							<input th:field="*{endereco.cidade}" id="cidade" placeholder="Informe a cidade">
+						
+							<div th:if="${#fields.hasErrors('endereco.cidade')}">
+								<label style="color: red;" th:errors="*{endereco.cidade}"></label>
+							</div>
+						</div>
+
+						<div class="col">
+							<label>Estado</label>
+							<input th:field="*{endereco.estado}" id="uf" placeholder="Informe o estado" maxlength="2">
+						
+							<div th:if="${#fields.hasErrors('endereco.estado')}">
+								<label style="color: red;" th:errors="*{endereco.estado}"></label>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<input type="submit" value="Salvar" class="btn">
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

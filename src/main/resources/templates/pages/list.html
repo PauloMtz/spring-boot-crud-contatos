@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+	<meta charset="UTF-8" />
+</head>
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+		<div class="base-home">
+			<h1 class="titulo"><span class="cor">Lista de</span> contatos</h1>
+			
+			<div class="base-lista">
+				<span class="qtde">Total: <b>[[${registros}]]</b> registros</span>
+
+				<div class="tabela">
+					<div th:replace="~{fragments/alerta}"></div>
+
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<thead>
+							<tr>
+								<th align="left">Nome</th>
+								<th align="left">Cidade</th>
+								<th align="left">Telefone</th>
+								<th>Estado</th>
+								<th colspan="2" align="center">Opções</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="cor1" th:each="contato : ${contatos}">
+								<td th:text="${contato.nome}"></td>
+								<td th:text="${contato.endereco.cidade}"></td>
+								<td th:text="${contato.telefone}"></td>
+								<td  align="center" th:text="${contato.endereco.estado}"></td>
+								<td align="center">
+									<a th:href="@{/contato/{id}/editar (id=${contato.id})}" class="btn">Editar</a>
+								</td>
+								<td align="center">
+									<a th:href="@{/contato/{id}/excluir (id=${contato.id})}" class="btn excluir"
+										onclick="return confirm('Deseja realmente excluir esse registro?')">excluir</a>
+								</td>
+							</tr>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+				<div th:replace="~{fragments/paginacao}"></div>
+
+				<!--<ul class="paginacao">
+					<li><a href="#" class="ant">Anterior</a></li>
+					<li class="ativo">1</li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li><a href="#">...</a></li>
+					<li><a href="#" class="prox">Próximo</a></li>
+				</ul>-->
+			</div>
+		</div>
+	</section>
+</body>
+</html>
