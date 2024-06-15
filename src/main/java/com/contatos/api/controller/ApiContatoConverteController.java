@@ -4,15 +4,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.contatos.api.model.dto.ContatoDto;
 import com.contatos.api.model.dto.EnderecoDto;
+import com.contatos.api.model.inputDto.ContatoInputDto;
 import com.contatos.api.repository.ApiContatoRepository;
+import com.contatos.api.service.ApiContatoService;
+import com.contatos.core.exception.RegistroNaoEncontradoException;
 import com.contatos.domain.model.Contato;
+import com.contatos.domain.model.Endereco;
 import com.contatos.domain.repository.ContatoRepository;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/converte/contato")
@@ -23,6 +33,9 @@ public class ApiContatoConverteController {
 
     @Autowired
     private ApiContatoRepository apiContatoRepository;
+
+    @Autowired
+    private ApiContatoService contatoService;
     
     @GetMapping("/listar")
     public List<ContatoDto> listar() {
@@ -49,6 +62,22 @@ public class ApiContatoConverteController {
         return convertToCollectionDto(apiContatoRepository.listarContatos());
     }
 
+    // localhost:8080/api/converte/contato/cadastrar
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/cadastrar")
+    public ContatoDto adicionar(@RequestBody 
+        @Valid ContatoInputDto inputDto) {
+
+        try {
+            Contato contato = convertToDomainObject(inputDto);
+            
+            // a classe RestauranteService fica isolada das classes Dto
+            return convertToDto(contatoService.salvar(contato));
+        } catch (RegistroNaoEncontradoException e) {
+            throw new RegistroNaoEncontradoException(e.getMessage());
+        }
+    }
+
     private ContatoDto convertToDto(Contato contato) {
 
         EnderecoDto enderecoDto = new EnderecoDto();
@@ -70,5 +99,20 @@ public class ApiContatoConverteController {
         return contatos.stream()
             .map(contato -> convertToDto(contato))
             .collect(Collectors.toList());
+    }
+
+    private Contato convertToDomainObject(ContatoInputDto inputDto) {
+        Contato contato = new Contato();
+        contato.setNome(inputDto.getNome());
+        contato.setCpf(inputDto.getCpf());
+        contato.setEmail(inputDto.getEmail());
+        contato.setTelefone(inputDto.getTelefone());
+
+        Endereco endereco = new Endereco();
+        endereco.setId(inputDto.getEnderecoInput().getId());
+
+        contato.setEndereco(endereco);
+
+        return contato;
     }
 }
