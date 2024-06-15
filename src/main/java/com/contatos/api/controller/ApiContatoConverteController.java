@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.contatos.api.assembler.ContatoDtoAssembler;
+import com.contatos.api.assembler.ContatoDtoDisassembler;
 import com.contatos.api.model.dto.ContatoDto;
 import com.contatos.api.model.inputDto.ContatoInputDto;
 import com.contatos.api.repository.ApiContatoRepository;
 import com.contatos.api.service.ApiContatoService;
 import com.contatos.core.exception.RegistroNaoEncontradoException;
 import com.contatos.domain.model.Contato;
-import com.contatos.domain.model.Endereco;
 import com.contatos.domain.repository.ContatoRepository;
 
 import jakarta.validation.Valid;
@@ -38,6 +38,9 @@ public class ApiContatoConverteController {
 
     @Autowired
     private ContatoDtoAssembler assembler;
+
+    @Autowired
+    private ContatoDtoDisassembler disassembler;
     
     @GetMapping("/listar")
     public List<ContatoDto> listar() {
@@ -71,7 +74,7 @@ public class ApiContatoConverteController {
         @Valid ContatoInputDto inputDto) {
 
         try {
-            Contato contato = convertToDomainObject(inputDto);
+            Contato contato = disassembler.convertToDomainObject(inputDto);
             
             // a classe RestauranteService fica isolada das classes Dto
             return assembler.convertToDto(contatoService.salvar(contato));
@@ -104,7 +107,8 @@ public class ApiContatoConverteController {
             .collect(Collectors.toList());
     }*/
 
-    private Contato convertToDomainObject(ContatoInputDto inputDto) {
+    // esse método foi movido para uma classe disassembler
+    /*private Contato convertToDomainObject(ContatoInputDto inputDto) {
         Contato contato = new Contato();
         contato.setNome(inputDto.getNome());
         contato.setCpf(inputDto.getCpf());
@@ -117,5 +121,5 @@ public class ApiContatoConverteController {
         contato.setEndereco(endereco);
 
         return contato;
-    }
+    }*/
 }
