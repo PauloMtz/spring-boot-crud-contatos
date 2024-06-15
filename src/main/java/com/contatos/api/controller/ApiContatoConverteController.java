@@ -1,7 +1,6 @@
 package com.contatos.api.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.contatos.api.assembler.ContatoDtoAssembler;
 import com.contatos.api.model.dto.ContatoDto;
-import com.contatos.api.model.dto.EnderecoDto;
 import com.contatos.api.model.inputDto.ContatoInputDto;
 import com.contatos.api.repository.ApiContatoRepository;
 import com.contatos.api.service.ApiContatoService;
@@ -36,6 +35,9 @@ public class ApiContatoConverteController {
 
     @Autowired
     private ApiContatoService contatoService;
+
+    @Autowired
+    private ContatoDtoAssembler assembler;
     
     @GetMapping("/listar")
     public List<ContatoDto> listar() {
@@ -51,7 +53,7 @@ public class ApiContatoConverteController {
 
         // faz vários selects
         // localhost:8080/api/converte/contato/listar
-        return convertToCollectionDto(contatoRepository.findAll());
+        return assembler.convertToCollectionDto(contatoRepository.findAll());
     }
 
     @GetMapping("/listar-contatos")
@@ -59,7 +61,7 @@ public class ApiContatoConverteController {
 
         // faz apenas um select
         // localhost:8080/api/converte/contato/listar-contatos
-        return convertToCollectionDto(apiContatoRepository.listarContatos());
+        return assembler.convertToCollectionDto(apiContatoRepository.listarContatos());
     }
 
     // localhost:8080/api/converte/contato/cadastrar
@@ -72,13 +74,14 @@ public class ApiContatoConverteController {
             Contato contato = convertToDomainObject(inputDto);
             
             // a classe RestauranteService fica isolada das classes Dto
-            return convertToDto(contatoService.salvar(contato));
+            return assembler.convertToDto(contatoService.salvar(contato));
         } catch (RegistroNaoEncontradoException e) {
             throw new RegistroNaoEncontradoException(e.getMessage());
         }
     }
 
-    private ContatoDto convertToDto(Contato contato) {
+    // esses métodos foram movidos para uma classe assembler
+    /*private ContatoDto convertToDto(Contato contato) {
 
         EnderecoDto enderecoDto = new EnderecoDto();
         enderecoDto.setId(contato.getEndereco().getId());
@@ -99,7 +102,7 @@ public class ApiContatoConverteController {
         return contatos.stream()
             .map(contato -> convertToDto(contato))
             .collect(Collectors.toList());
-    }
+    }*/
 
     private Contato convertToDomainObject(ContatoInputDto inputDto) {
         Contato contato = new Contato();
