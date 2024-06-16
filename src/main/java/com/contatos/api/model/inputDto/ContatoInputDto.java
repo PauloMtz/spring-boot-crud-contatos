@@ -27,5 +27,5 @@ public class ContatoInputDto {
 
     @Valid
 	@NotNull
-    private EnderecoInputDto enderecoInput;
+    private EnderecoIdInputDto enderecoInput;
 }

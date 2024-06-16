@@ -1,6 +1,6 @@
 package com.contatos.api.model.inputDto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +8,20 @@ import lombok.Setter;
 @Setter
 public class EnderecoInputDto {
     
-    @NotNull
-    private Long id;
+    @NotBlank
+	private String cep;
+    
+	@NotBlank
+	private String endereco;
+
+	private String complemento;
+	
+	@NotBlank
+	private String bairro;
+
+	@NotBlank
+	private String cidade;
+
+	@NotBlank
+	private String estado;
 }
