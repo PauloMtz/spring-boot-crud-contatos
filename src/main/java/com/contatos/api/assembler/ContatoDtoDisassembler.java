@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.contatos.api.model.inputDto.ContatoInputDto;
 import com.contatos.domain.model.Contato;
 //import com.contatos.domain.model.Endereco;
+import com.contatos.domain.model.Endereco;
 
 @Component
 public class ContatoDtoDisassembler {
@@ -31,5 +32,11 @@ public class ContatoDtoDisassembler {
         return contato;*/
 
         return modelMapper.map(inputDto, Contato.class);
+    }
+
+    public void copyToDomainObject(ContatoInputDto inputDto, Contato contato) {
+
+        contato.setEndereco(new Endereco());
+        modelMapper.map(inputDto, contato);
     }
 }

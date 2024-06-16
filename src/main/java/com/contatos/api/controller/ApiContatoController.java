@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,8 +27,8 @@ import com.contatos.domain.repository.ContatoRepository;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/converte/contato")
-public class ApiContatoConverteController {
+@RequestMapping("/api/contato")
+public class ApiContatoController {
 
     @Autowired
     private ContatoRepository contatoRepository;
@@ -42,6 +45,7 @@ public class ApiContatoConverteController {
     @Autowired
     private ContatoDtoDisassembler disassembler;
     
+    // localhost:8080/api/contato/listar
     @GetMapping("/listar")
     public List<ContatoDto> listar() {
 
@@ -55,19 +59,18 @@ public class ApiContatoConverteController {
         */
 
         // faz vários selects
-        // localhost:8080/api/converte/contato/listar
         return assembler.convertToCollectionDto(contatoRepository.findAll());
     }
 
+    // localhost:8080/api/contato/listar-contatos
     @GetMapping("/listar-contatos")
     public List<ContatoDto> listarContatos() {
 
         // faz apenas um select
-        // localhost:8080/api/converte/contato/listar-contatos
         return assembler.convertToCollectionDto(apiContatoRepository.listarContatos());
     }
 
-    // localhost:8080/api/converte/contato/cadastrar
+    // localhost:8080/api/contato/cadastrar
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/cadastrar")
     public ContatoDto adicionar(@RequestBody 
@@ -82,6 +85,36 @@ public class ApiContatoConverteController {
             throw new RegistroNaoEncontradoException(e.getMessage());
         }
     }
+
+    // localhost:8080/api/contato/buscar/1
+    @GetMapping("/buscar/{contatoId}")
+    public ContatoDto buscarPorId(@PathVariable("contatoId") Long id) {
+
+        return assembler.convertToDto(contatoService.buscar(id));
+    }
+
+    // localhost:8080/api/contato/atualizar/1
+    @PutMapping("/atualizar/{contatoId}")
+    public ContatoDto atualizar(@PathVariable Long contatoId,
+        @RequestBody @Valid ContatoInputDto inputDto) {
+
+        try {
+            Contato contato = contatoService.buscar(contatoId);
+            disassembler.copyToDomainObject(inputDto, contato);
+            contato = contatoService.salvar(contato);
+
+            return assembler.convertToDto(contato);
+        } catch (RegistroNaoEncontradoException e) {
+            throw new RegistroNaoEncontradoException("Contato não encontrado");
+        }
+    }
+
+    // localhost:8080/api/contato/excluir/1
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/excluir/{contatoId}")
+	public void remover(@PathVariable Long contatoId) {
+        contatoService.excluir(contatoId);
+	}
 
     // esses métodos foram movidos para uma classe assembler
     /*private ContatoDto convertToDto(Contato contato) {
