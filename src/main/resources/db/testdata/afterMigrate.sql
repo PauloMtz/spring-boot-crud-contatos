@@ -8,6 +8,11 @@ set foreign_key_checks = 1;
 alter table enderecos auto_increment = 1;
 alter table contatos auto_increment = 1;
 
+/*
+* registros fictícios utilizados apenas com a finalidade de teste de dados
+* gerados a partir de: https://www.4devs.com.br/gerador_de_pessoas
+*/
+
 insert into enderecos (id, cep, endereco, complemento, bairro, cidade, estado)
     values (1, '88702-135', 'Rua Amadio Vettoretti, 524', null, 'Oficinas', 'Tubarão', 'SC');
 insert into enderecos (id, cep, endereco, complemento, bairro, cidade, estado)
